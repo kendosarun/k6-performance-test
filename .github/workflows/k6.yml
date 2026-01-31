@@ -8,6 +8,7 @@ on:
     inputs:
       base_url:
         description: "Base URL"
+        default: "https://quickpizza.grafana.com"
         required: true
       profile:
         description: "Profile"

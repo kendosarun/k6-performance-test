@@ -59,18 +59,19 @@ jobs:
   deploy-pages:
     needs: run-k6
     runs-on: ubuntu-latest
-
+  
+    permissions:
+      pages: write
+      id-token: write
+  
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
+  
     steps:
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Deploy Pages
-        id: deployment
+      - uses: actions/configure-pages@v5
+  
+      - id: deployment
         uses: actions/deploy-pages@v4
+  
+      - run: echo "K6 Dashboard 👉 ${{ steps.deployment.outputs.page_url }}"
 
-      - name: Show Pages URL
-        run: echo "K6 Dashboard 👉 ${{ steps.deployment.outputs.page_url }}"

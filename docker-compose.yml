@@ -8,6 +8,3 @@ services:
     volumes:
       - ./tests:/tests
       - ./reports:/reports
-    # command: >
-    #   run performance.js
-    #   --summary-export=/reports/summary.json

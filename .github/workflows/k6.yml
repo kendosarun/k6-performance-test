@@ -23,12 +23,15 @@ permissions:
   id-token: write
 
 jobs:
-  run-k6:
+  k6-and-pages:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
 
     steps:
       - uses: actions/checkout@v4
 
+      # ---- Install k6 (official way) ----
       - name: Install k6
         run: |
           sudo apt-get update
@@ -38,10 +41,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y k6
 
-      - name: Create reports folder
+      # ---- Prepare report dir ----
+      - name: Prepare reports
         run: mkdir -p reports
 
-      - name: Run k6
+      # ---- Run k6 ----
+      - name: Run k6 test
         run: |
           k6 run tests/performance.js \
             --summary-export=reports/summary.json
@@ -51,27 +56,23 @@ jobs:
           K6_WEB_DASHBOARD: "true"
           K6_WEB_DASHBOARD_EXPORT: "reports/index.html"
 
+      - name: Verify reports
+        run: ls -la reports
+
+      # ---- Publish to Pages ----
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: reports
 
-  deploy-pages:
-    needs: run-k6
-    runs-on: ubuntu-latest
-  
-    permissions:
-      pages: write
-      id-token: write
-  
-    environment:
-      name: github-pages
-  
-    steps:
-      - uses: actions/configure-pages@v5
-  
-      - id: deployment
+      - name: Deploy Pages
+        id: deployment
         uses: actions/deploy-pages@v4
   
       - run: echo "K6 Dashboard 👉 ${{ steps.deployment.outputs.page_url }}"
 
+      - name: Show Dashboard URL
+        run: echo "K6 Dashboard 👉 ${{ steps.deployment.outputs.page_url }}"

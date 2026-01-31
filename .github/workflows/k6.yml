@@ -10,6 +10,12 @@ on:
         description: "load | stress | spike | endurance"
         required: true
         default: "load"
+        type: choice
+        options:
+          - load
+          - stress
+          - spike
+          - endurance
 
 jobs:
   k6:

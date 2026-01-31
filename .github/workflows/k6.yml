@@ -7,7 +7,7 @@ on:
         description: "Base URL"
         required: true
       profile:
-        description: "load | stress | spike | endurance"
+        description: "Profile"
         required: true
         default: "load"
         type: choice

@@ -23,7 +23,7 @@ permissions:
   id-token: write
 
 jobs:
-  k6:
+  run-k6:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,7 +31,6 @@ jobs:
 
       - name: Install k6
         run: |
-          sudo gpg -k
           sudo apt-get update
           sudo apt-get install -y gnupg software-properties-common
           curl -fsSL https://dl.k6.io/key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/k6-archive-keyring.gpg
@@ -52,16 +51,22 @@ jobs:
           K6_WEB_DASHBOARD: "true"
           K6_WEB_DASHBOARD_EXPORT: "reports/index.html"
 
-      - name: Check reports
-        run: ls -la reports
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: reports
 
+  deploy-pages:
+    needs: run-k6
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
       - name: Deploy Pages
+        id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Show Pages URL
+        run: echo "K6 Dashboard 👉 ${{ steps.deployment.outputs.page_url }}"

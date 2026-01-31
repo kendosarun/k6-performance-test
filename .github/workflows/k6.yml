@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Prepare reports folder
+      - name: Create reports dir
         run: mkdir -p reports
 
       - name: Run k6
@@ -33,26 +33,17 @@ jobs:
           filename: tests/performance.js
           flags: >
             --summary-export=reports/summary.json
-
         env:
           BASE_URL: ${{ github.event.inputs.base_url }}
           PROFILE: ${{ github.event.inputs.profile }}
-          K6_WEB_DASHBOARD: true
-          K6_WEB_DASHBOARD_EXPORT: reports/dashboard.html
+          K6_WEB_DASHBOARD: "true"
+          K6_WEB_DASHBOARD_EXPORT: "reports/index.html"
 
-      # - name: Upload reports
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: k6-report
-      #     path: reports/
+      - name: Debug reports
+        run: ls -la reports
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          path: reports
-
-      - name: Deploy to Pages
-        uses: actions/deploy-pages@v4
+          name: k6-report
+          path: reports/

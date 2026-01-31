@@ -24,16 +24,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Login to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
       - name: Make run.sh executable
         run: chmod +x run.sh
 
-      - name: Run K6
+      - name: Login to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Run k6
         run: ./run.sh "${{ github.event.inputs.base_url }}" "${{ github.event.inputs.profile }}"
 
-      - name: Upload K6 Reports
+      - name: Upload k6 Reports
         uses: actions/upload-artifact@v4
         with:
           name: k6-report

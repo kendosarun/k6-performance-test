@@ -1,0 +1,13 @@
+services:
+  k6:
+    image: grafana/k6:latest
+    pull_policy: never
+    working_dir: /tests
+    ports:
+      - "5665:5665"   # expose dashboard
+    volumes:
+      - ./tests:/tests
+      - ./reports:/reports
+    # command: >
+    #   run performance.js
+    #   --summary-export=/reports/summary.json

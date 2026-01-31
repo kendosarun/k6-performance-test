@@ -10,6 +10,12 @@ if (!BASE_URL) {
 
 function getOptions(profile) {
   switch (profile) {
+    case "smoke":
+      return {
+        stages: [
+          { duration: "1m", target: 5 },
+        ],
+      };
     case "load":
       return {
         stages: [

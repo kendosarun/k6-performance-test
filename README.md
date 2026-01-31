@@ -1,4 +1,4 @@
-# K6 Performance testing
+# k6 Performance testing
 
 ### Command
 - `sh run.sh https://quickpizza.grafana.com load`

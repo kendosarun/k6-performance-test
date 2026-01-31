@@ -1,6 +1,9 @@
 name: k6 Performance
 
 on:
+  schedule:
+    - cron: "15 0 * * 0,5"
+
   workflow_dispatch:
     inputs:
       base_url:

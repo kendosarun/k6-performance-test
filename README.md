@@ -44,3 +44,6 @@ sh run.sh https://quickpizza.grafana.com endurance
 
 ### ‼️ Make the runner script executable (IMPORTANT)‼️
 ``` chmod +x run.sh ``` Without this step, sh run.sh or ./run.sh **may fail with permission denied.**
+
+### Latest report of Performance testing
+[k6 report](https://kendosarun.github.io/k6-performance-test/)

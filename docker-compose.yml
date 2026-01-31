@@ -1,6 +1,6 @@
 services:
   k6:
-    image: grafana/k6:latest
+    image: ghcr.io/kendosarun/k6:latest
     pull_policy: never
     working_dir: /tests
     ports:

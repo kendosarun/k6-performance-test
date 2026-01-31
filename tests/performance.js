@@ -30,7 +30,7 @@ function getOptions(profile) {
       return {
         stages: [
           { duration: "30s", target: 20 },
-          { duration: "10s", target: 300 },
+          { duration: "10s", target: 700 },
           { duration: "1m", target: 20 },
           { duration: "30s", target: 0 },
         ],

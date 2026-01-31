@@ -1,0 +1,58 @@
+name: K6 Performance
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: "Base URL"
+        required: true
+      profile:
+        description: "Profile"
+        required: true
+        default: "load"
+        type: choice
+        options: [load, stress, spike, endurance]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  k6-and-pages:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare reports dir
+        run: mkdir -p "$GITHUB_WORKSPACE/reports"
+
+      - name: Run k6
+        uses: grafana/k6-action@v0.3.1
+        with:
+          filename: tests/performance.js
+          flags: >
+            --summary-export=$GITHUB_WORKSPACE/reports/summary.json
+        env:
+          BASE_URL: ${{ github.event.inputs.base_url }}
+          PROFILE: ${{ github.event.inputs.profile }}
+          K6_WEB_DASHBOARD: "true"
+          K6_WEB_DASHBOARD_EXPORT: "$GITHUB_WORKSPACE/reports/index.html"
+
+      - name: Verify reports
+        run: ls -la "$GITHUB_WORKSPACE/reports"
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ github.workspace }}/reports
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Show URL
+        run: echo "K6 Dashboard 👉 ${{ steps.deployment.outputs.page_url }}"

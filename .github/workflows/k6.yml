@@ -23,7 +23,7 @@ permissions:
   id-token: write
 
 jobs:
-  k6-and-pages:
+  k6:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -31,7 +31,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # ---- Install k6 (official way) ----
       - name: Install k6
         run: |
           sudo apt-get update
@@ -41,11 +40,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y k6
 
-      # ---- Prepare report dir ----
       - name: Prepare reports
         run: mkdir -p reports
 
-      # ---- Run k6 ----
       - name: Run k6 test
         run: |
           k6 run tests/performance.js \
@@ -59,7 +56,6 @@ jobs:
       - name: Verify reports
         run: ls -la reports
 
-      # ---- Publish to Pages ----
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
@@ -67,6 +63,13 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: reports
+
+      - name: Upload K6 artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-report
+          path: reports/
+          retention-days: 14
 
       - name: Deploy Pages
         id: deployment

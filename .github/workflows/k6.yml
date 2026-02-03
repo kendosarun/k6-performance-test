@@ -53,7 +53,6 @@ jobs:
           k6 run tests/performance.js \
             --summary-export=reports/summary.json
         env:
-          # BASE_URL: ${{ github.event.inputs.base_url }}
           BASE_URL: "https://quickpizza.grafana.com"
           PROFILE: ${{ github.event.inputs.profile }}
           K6_WEB_DASHBOARD: "true"

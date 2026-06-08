@@ -13,4 +13,4 @@ docker compose run --rm --service-ports \
   --env PROFILE=$PROFILE \
   --env K6_WEB_DASHBOARD=true \
   --env K6_WEB_DASHBOARD_PORT=5665 \
-  --env K6_WEB_DASHBOARD_PERIOD=3s
+  --env K6_WEB_DASHBOARD_PERIOD=5s

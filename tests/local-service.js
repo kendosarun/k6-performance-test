@@ -1,24 +1,21 @@
 import http from "k6/http";
 import { check, sleep } from "k6";
 
-const BASE_URL = __ENV.BASE_URL;
-const PROFILE = __ENV.PROFILE || "load";
+const BASE_URL = 'http://0.0.0.0:8080/';
+const PROFILE = __ENV.PROFILE || 'smoke';
 
-if (!BASE_URL) {
-  throw new Error("BASE_URL is required. Pass with -e BASE_URL=...");
-}
 
 function getOptions(profile) {
   switch (profile) {
     case "smoke":
       return {
-        stages: [{ duration: "1m", target: 100 }],
+        stages: [{ duration: "1m", target: 300 }, { duration: "30s", target: 0 }],
       };
     case "load":
       return {
         stages: [
           { duration: "2m", target: 500 },
-          { duration: "5m", target: 500 },
+          { duration: "2m", target: 700 },
           { duration: "2m", target: 0 },
         ],
       };
@@ -60,7 +57,7 @@ export const options = {
 };
 
 export default function () {
-  const res = http.get(`${BASE_URL}`);
+  const res = http.get(`${BASE_URL}/product`);
 
   check(res, {
     "status 200": (r) => r.status === 200,
